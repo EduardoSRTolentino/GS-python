@@ -80,11 +80,19 @@ def frase_motivacional():
     except:
         return None
 
+def livro_recomendado(habilidade):
+    try:
+        r = requests.get(f"https://openlibrary.org/search.json?q={habilidade}&limit=1", timeout=10)
+        data = r.json()
+        titulo = data["docs"][0]["title"]
+        return f'"{titulo}" (OpenLibrary)'
+    except:
+        return None
+
 def escolher_profissao():
     print("\n=== Profissões Disponíveis ===")
     for i, p in enumerate(PROFISSOES.keys(), 1):
         print(f"{i}. {p}")
-
     try:
         index = int(input("Escolha: ")) - 1
         return list(PROFISSOES.keys())[index]
@@ -98,14 +106,14 @@ def adicionar_profissao(user, usuarios):
         return
 
     exigidas = PROFISSOES[prof]
-    print(f"\n📌 A profissão **{prof}** exige as seguintes habilidades:\n")
+    print(f"\n📌 A profissão **{prof}** exige:\n")
     for h in exigidas:
         print("-", h)
 
     habilidades_tidas = []
-    print("\nDigite agora apenas as habilidades que você já possui.")
+    print("\nDigite quais dessas habilidades você já possui:")
     while True:
-        h = input("Habilidade (ou ENTER para parar): ").strip().title()
+        h = input("Habilidade (ENTER para parar): ").strip().title()
         if h == "":
             break
         habilidades_tidas.append(h)
@@ -117,7 +125,6 @@ def adicionar_profissao(user, usuarios):
         "habilidades": habilidades_tidas,
         "faltando": faltando
     })
-
     salvar_usuarios(usuarios)
 
     print("\n✅ Profissão adicionada!")
@@ -143,9 +150,9 @@ def adicionar_habilidades(user, usuarios):
     if not prof:
         return
 
-    print(f"\n=== Adicionar habilidades para {prof['nome']} ===")
+    print(f"\n=== Adicionar habilidades a {prof['nome']} ===")
     while True:
-        h = input("Nova habilidade (ou ENTER para sair): ").strip().title()
+        h = input("Nova habilidade (ENTER para sair): ").strip().title()
         if h == "":
             break
 
@@ -169,13 +176,17 @@ def ver_perfil(user):
     for p in user["profissoes"]:
         print("\n📌", p["nome"])
         print("• Habilidades:", ", ".join(p["habilidades"]) if p["habilidades"] else "Nenhuma ainda")
-        print("• Faltando:", ", ".join(p["faltando"]) if p["faltando"] else "Nada! Você está pronto 😎")
+        print("• Faltando:", ", ".join(p["faltando"]) if p["faltando"] else "Nada! Você está ótimo 😎")
 
         if p["faltando"]:
-            print("\n→ Recomendações de Cursos:")
+            print("\n→ Recomendações de Cursos e Livros:")
             for h in p["faltando"]:
                 curso = CURSOS.get(h, "Pesquisar no YouTube")
-                print(f"{h}: {curso}")
+                livro = livro_recomendado(h)
+
+                print(f"\n{h}:")
+                print(f"   Curso: {curso}")
+                print(f"   Livro: {livro if livro else 'Pesquisar no Google / OpenLibrary'}")
 
 def main():
     usuarios = ler_usuarios()
