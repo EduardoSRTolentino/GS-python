@@ -1,0 +1,33 @@
+[
+  {
+    "nome": "eduardo",
+    "email": "eduardo@email.com",
+    "senha": "12345",
+    "profissoes": [
+      {
+        "nome": "Desenvolvedor Backend",
+        "habilidades": [
+          "Lógica",
+          "Git",
+          "Python"
+        ],
+        "faltando": [
+          "Banco De Dados",
+          "Apis Rest"
+        ]
+      },
+      {
+        "nome": "Desenvolvedor Frontend",
+        "habilidades": [
+          "Html",
+          "Css"
+        ],
+        "faltando": [
+          "Javascript",
+          "Git",
+          "React"
+        ]
+      }
+    ]
+  }
+]
