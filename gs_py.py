@@ -3,6 +3,34 @@ import requests
 
 ARQ_USUARIOS = "usuarios.json"
 
+IA_RECOMENDADAS = {
+    "Desenvolvedor Backend": [
+        ("GitHub Copilot", "Auxilia na escrita e correção de código, agilizando o desenvolvimento."),
+        ("ChatGPT", "Pode explicar códigos, erros e ajudar a aprender novos conceitos de back-end."),
+        ("Postman AI", "Ajuda a testar e documentar APIs de forma inteligente.")
+    ],
+    "Desenvolvedor Frontend": [
+        ("Figma AI", "Gera protótipos e componentes visuais rapidamente."),
+        ("GitHub Copilot", "Sugere código HTML, CSS e JavaScript conforme você digita."),
+        ("Uizard AI", "Transforma esboços em interfaces completas automaticamente.")
+    ],
+    "Analista de Dados": [
+        ("ChatGPT", "Ajuda a interpretar resultados estatísticos e escrever relatórios."),
+        ("Pandas AI", "Extensão que analisa dados e gera insights automaticamente."),
+        ("ChatData", "Permite fazer perguntas diretamente aos seus conjuntos de dados.")
+    ],
+    "Suporte Técnico": [
+        ("ChatGPT", "Ajuda a diagnosticar erros e orientar soluções para problemas técnicos."),
+        ("Google Bard / Gemini", "Bom para consultas rápidas sobre configurações e sistemas."),
+        ("TeamViewer Assist", "Auxilia em suporte remoto guiado com IA.")
+    ],
+    "Administrador de Sistemas": [
+        ("Ansible AI", "Automatiza configurações de servidores."),
+        ("ChatGPT", "Explica logs, erros e configurações avançadas."),
+        ("Datadog AI", "Monitora infraestrutura e indica falhas automaticamente.")
+    ]
+}
+
 PROFISSOES = {
     "Desenvolvedor Backend": ["Lógica", "Python", "Git", "Banco De Dados", "Apis Rest"],
     "Desenvolvedor Frontend": ["Html", "Css", "Javascript", "Git", "React"],
@@ -178,6 +206,7 @@ def ver_perfil(user):
         print("• Habilidades:", ", ".join(p["habilidades"]) if p["habilidades"] else "Nenhuma ainda")
         print("• Faltando:", ", ".join(p["faltando"]) if p["faltando"] else "Nada! Você está ótimo 😎")
 
+        # Recomendações de Cursos e Livros
         if p["faltando"]:
             print("\n→ Recomendações de Cursos e Livros:")
             for h in p["faltando"]:
@@ -187,6 +216,12 @@ def ver_perfil(user):
                 print(f"\n{h}:")
                 print(f"   Curso: {curso}")
                 print(f"   Livro: {livro if livro else 'Pesquisar no Google / OpenLibrary'}")
+
+        # 🎯 Recomendações de IAs específicas para a profissão
+        print("\n🤖 Inteligências Artificiais Recomendadas:")
+        ia_lista = IA_RECOMENDADAS.get(p["nome"], [])
+        for nome_ia, motivo in ia_lista:
+            print(f" - {nome_ia}: {motivo}")
 
 def main():
     usuarios = ler_usuarios()
